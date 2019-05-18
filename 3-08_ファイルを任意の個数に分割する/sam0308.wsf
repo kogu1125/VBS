@@ -1,0 +1,57 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はFileCutter -->
+<job id="FileCutter">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>指定したファイルを、任意の個数に分割するサンプルプログラムです。
+    </description>
+    <unnamed name="分割対象ファイル"
+             helpstring="分割する対象のファイルを指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="c"
+           helpstring="分割数を指定します。省略時は2個に分割します。"
+           type="string"
+           required="false"
+    />
+    <example>
+■実行例
+フルパスで指定したとき
+cscript sam0308.wsf d:\work5\data.zip 5
+
+相対パスで指定したとき
+cscript sam0308.wsf ..\work5\data.zip 5
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、対象ファイルなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0308.vbs"></script>
+<script language="VBScript" src="./include/file_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- ADODB.Streamライブラリを宣言(関連する定数が使用できるため) -->
+<reference object="ADODB.Stream"></reference>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'ファイルの分割処理を実行し結果を調べます。
+    'ユーザ関数「FileCutter」はsam0308.vbsに含まれます
+    If FileCutter() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

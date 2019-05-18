@@ -1,0 +1,60 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はTextReplace -->
+<job id="TextReplace">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>テキストファイルの一部分を、別な内容に置き換えるサンプルです。
+    </description>
+    <unnamed name="対象ファイル"
+             helpstring="対象ファイルのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="置き換え前 置き換え後"
+             helpstring="置き換え前の文字列と置き換え後の文字列を指定します。"
+             many="true"
+             required="true"
+    />
+    <example>
+■実行例
+フルパスで指定したとき
+cscript sam0312.wsf d:\work\testdata.txt マグロ あわび
+
+相対パスで指定したとき
+cscript sam0312.wsf ..\work\testdata.txt マグロ あわび
+
+■特殊文字の指定
+/S   半角空白
+/W   全角空白
+/NUL カラ文字列（/NULLは置き換え後のみ指定可能）
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、対象ファイルなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0312.vbs"></script>
+<script language="VBScript" src="./include/file_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/const.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'ファイルが更新されている間、待機する処理を実行し結果を調べます
+    'ユーザ関数「TextReplace」はsam0312.vbsに含まれます
+    If TextReplace() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

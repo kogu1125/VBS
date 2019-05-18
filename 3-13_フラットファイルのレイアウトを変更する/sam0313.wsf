@@ -1,0 +1,61 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はFlatToFlat -->
+<job id="FlatToFlat">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>フラットファイル（テキストファイル）を扱うためのサンプルです。
+    </description>
+    <unnamed name="入力ファイル"
+             helpstring="入力ファイルのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="出力ファイル"
+             helpstring="出力ファイルのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <example>
+■実行例
+フルパスで指定したとき
+cscript sam0313.wsf d:\work\FLATINDATA.txt d:\work\FLATOUTDATA.txt
+
+相対パスで指定したとき
+cscript sam0313.wsf ..\work\FLATINDATA.txt ..\work\FLATOUTDATA.txt
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、対象ファイルなし、データ異常）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0313.vbs"></script>
+<script language="VBScript" src="./include/file_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/ado_common.vbs"></script>
+<script language="VBScript" src="./include/const.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+<script language="VBScript" src="./include/check_32bitmode.vbs"></script>
+
+<!-- ADODBライブラリを宣言(関連する定数が使用できるため) -->
+<reference object="ADODB.Connection"></reference>
+<reference object="ADODB.Recordset"></reference>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'フラットファイルのレイアウト変換処理を実行し結果を調べます
+    'ユーザ関数「FlatToFlat」はsam0313.vbsに含まれます
+    If FlatToFlat() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

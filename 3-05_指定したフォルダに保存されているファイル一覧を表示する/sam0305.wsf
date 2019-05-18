@@ -1,0 +1,90 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はSearchFolder -->
+<job id="SearchFolder">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>指定したフォルダ内に保存されているファイルの一覧を表示するサンプルです。サブフォルダの検索もできます。
+    </description>
+    <unnamed name="処理対象フォルダ"
+             helpstring="処理対象フォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="t"
+           helpstring="見出し行を表示します。"
+           type="simple"
+           required="false"
+    />
+    <named name="f"
+           helpstring="ファイル名のみを表示します。"
+           type="simple"
+           required="false"
+    />
+    <named name="s"
+           helpstring="ファイルのサイズを表示します。"
+           type="simple"
+           required="false"
+    />
+    <named name="c"
+           helpstring="ファイルの作成日を表示します"
+           type="simple"
+           required="false"
+    />
+    <named name="u"
+           helpstring="ファイルの更新日を表示します"
+           type="simple"
+           required="false"
+    />
+    <named name="a"
+           helpstring="ファイルの最終アクセス日を表示します"
+           type="simple"
+           required="false"
+    />
+    <named name="zip"
+           helpstring="zipなどの書庫ファイルを含める（ただし、日付やサイズは表示しない）。"
+           type="simple"
+           required="false"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+    <example>
+■実行例
+処理対象フォルダをフルパスで指定
+cscript sam0305.wsf d:\work /u /sub
+
+処理対象フォルダを相対パスで指定
+cscript sam0305.wsf ..\work /u /sub
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、処理対象フォルダなし）
+    </example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0305.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'フォルダを検索する処理を実行し、結果を調べます
+    'ユーザ関数「FolderSearch」はsam0305.vbsに含まれます
+    If FolderSearch() = True Then
+       'コピーができたときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       'コピーに失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

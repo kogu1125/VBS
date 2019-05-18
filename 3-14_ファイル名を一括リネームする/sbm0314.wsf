@@ -1,0 +1,69 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はFileRename -->
+<job id="FileRename">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>対象フォルダ内に保存されているファイルを一定の書式に一括してリネームするサンプルです。
+    </description>
+    <unnamed name="対象フォルダ"
+             helpstring="リネームするファイルが保存されているフォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="変更前"
+             helpstring="変更前の内容を指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="[変更後]"
+             helpstring="変更後の内容を指定します。/nullスイッチを指定指定したときは無視されます。"
+             many="false"
+             required="true"
+    />
+    <named name="null"
+           helpstring="変更前と一致する部分をnullに置き換えるときに指定します。"
+           type="simple"
+           required="false"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+    <example>
+■実行例
+フルパスで指定したとき
+cscript sam0314.wsf d:\work3 URIAGE SALES
+
+相対パスで指定したとき
+cscript sam0314.wsf ..\work3 URIAGE SALES
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、対象フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0314.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'ファイル名を一括リネームする処理を実行し結果を調べます
+    'ユーザ関数「FileRename」はsam0314.vbsに含まれます
+    If FileRename() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

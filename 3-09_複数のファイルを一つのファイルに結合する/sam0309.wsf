@@ -1,0 +1,69 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はFileJoin -->
+<job id="FileJoin">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>フォルダに保存されている複数ファイルから条件に合うファイルを選択し、１つのファイルに結合するサンプルです。
+    </description>
+    <unnamed name="結合元"
+             helpstring="結合元ファイルが保存されているフォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="結合後ファイル名"
+             helpstring="結合後ファイル名を指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="e"
+           helpstring="結合するファイルの拡張子を指定します。"
+           type="string"
+           required="true"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+    <example>
+■実行例
+フルパスで指定
+cscript sam0309.wsf d:\work5 d:\work5\join_data.zip /e:div
+
+結合元だけを相対パスで指定
+cscript sam0309.wsf ..\work5 d:\work5\join_data.zip /e:div
+
+両方を相対パスで指定
+cscript sam0309.wsf ..\work5 ..\work5\join_data.zip /e:div
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、結合元ファイルなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0309.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- ADODB.Streamライブラリを宣言(関連する定数が使用できるため) -->
+<reference object="ADODB.Stream"></reference>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    '特定のファイルをコピーする処理を実行し結果を調べます。
+    'メイン処理は、ユーザ関数「FileJoin」はsam0309.vbsに含まれます
+    If FileJoin() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

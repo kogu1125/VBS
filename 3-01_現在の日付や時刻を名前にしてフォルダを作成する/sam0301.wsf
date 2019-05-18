@@ -1,0 +1,66 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はCreateFolder -->
+<job id="CreateFolder">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>日付や時刻を名前にしたフォルダを作成するサンプルです。
+    </description>
+    <unnamed name="作成先フォルダ"
+             helpstring="フォルダ作成先のパスを指定します（省略可能）。"
+             many="false"
+             required="false"
+    />
+    <named name="書式"
+           helpstring="日付や時刻の書式を指定します。"
+           type="simple"
+           required="false"
+    />
+     <example>
+■書式の一覧(名前付き引数で指定)
+/d1…yyyymmdd で作成します  /t1…hhmmssで作成します
+/d2…yyyymm で作成します    /t2…hhmmで作成します
+/d3…mmdd で作成します      /t3…mmssで作成します
+/d4…yyyy で作成します      /t4…hhで作成します
+/d5…mm で作成します        /t5…mmで作成します
+/d6…dd で作成します        /t6…ssで作成します
+
+■実行例
+
+作成先をフルパスで指定
+cscript sam0301.wsf d:\work
+
+作成先を相対パスで指定
+cscript sam0301.wsf ..\work
+
+カレントディレクトリへ作成（引数を省略）
+cscript sam0301.wsf
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、作成先フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0301.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/vbs_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理。この部分が実行される -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'フォルダ作成処理を実行し、結果を調べます
+    'ユーザ関数「CreateFolder」はsam0301.vbsに含まれます
+    If CreateFolder() = True Then
+       'フォルダを作成できたときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       'フォルダを作成できたときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

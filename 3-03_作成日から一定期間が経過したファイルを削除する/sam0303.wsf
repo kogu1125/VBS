@@ -1,0 +1,59 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はDeleteTimelimit -->
+<job id="DeleteTimelimit">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>作成日から一定期間（日数）が経過したファイルだけを削除するサンプルです。
+    </description>
+    <unnamed name="処理対象フォルダ"
+             helpstring="フォルダ作成先のパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="日数"
+             helpstring="期間を日数（０以上）で指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+    <example>
+■実行例
+
+処理対象フォルダをフルパスで指定
+cscript sam0303.wsf d:\work  2
+
+処理対象フォルダを相対パスで指定
+cscript sam0303.wsf ..\data  2
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、処理対象フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0303.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    '保存期限切れファイルを削除する処理を実行し結果を調べます
+    'ユーザ関数「DeleteTimelimit」はsam0303.vbsに含まれます
+    If DeleteTimelimit() = True Then
+       'コピーができたときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       'コピーに失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

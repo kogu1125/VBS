@@ -1,0 +1,57 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はTailCommand -->
+<job id="TailCommand">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>Unix系OSのtailコマンドと似たような処理を行うサンプルです。指定したファイルを監視し、追加された部分を表示します。
+    </description>
+    <unnamed name="監視対象ファイル"
+             helpstring="監視するファイルのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="最大監視秒数"
+             helpstring="最大監視時間（秒数）を指定します"
+             many="false"
+             required="true"
+    />
+    <example>
+■実行例
+フルパスで指定したとき(監視時間は10分=600秒)
+cscript sam0316.wsf d:\work\sys03.log  600
+
+相対パスで指定したとき(監視時間は10分=600秒)
+cscript sam0316.wsf ..\work\sys03.log  600
+
+時間無制限で監視するとき
+cscript sam0316.wsf d:\work\sys03.log  0
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、監視対象ファイルなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0316.vbs"></script>
+<script language="VBScript" src="./include/file_common.vbs"></script>
+<script language="VBScript" src="./include/const.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'ファイルに追加された部分を表示する処理を実行し結果を調べます
+    'ユーザ関数「TailCommand」はsam0316.vbsに含まれます
+    If TailCommand() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

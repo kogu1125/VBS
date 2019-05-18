@@ -1,0 +1,81 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はModifiedFileCopy -->
+<job id="ModifiedFileCopy">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>指定したフォルダ内に保存されているファイルのうち、任意のタイミングで作成・更新・参照処理されたファイルを別なフォルダにコピーするサンプルです。/c /u /a スイッチを省略したときは、/c /u で検索します。。
+    </description>
+    <unnamed name="コピー元フォルダ"
+             helpstring="コピー元フォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="コピー先フォルダ"
+             helpstring="コピー先フォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="日数"
+             helpstring="処理当日を基準に、何日前を対象にするかを0以上の整数で指定します。0は処理当日です。省略時は0が指定されたとみなします。"
+             many="false"
+             required="false"
+    />
+    <named name="c"
+           helpstring="作成日でファイルを選別します。"
+           type="simple"
+           required="false"
+    />
+    <named name="u"
+           helpstring="更新日でファイルを選別します。"
+           type="simple"
+           required="false"
+    />
+    <named name="a"
+           helpstring="最終アクセス日でファイルを選別します。"
+           type="simple"
+           required="false"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+     <example>
+■実行例
+コピー元フォルダとコピー先フォルダをフルパスで指定
+cscript sam0306.wsf d:\work  d:\work2 0 /c
+
+コピー元フォルダだけを相対パスで指定したとき
+cscript sam0306.wsf ..\work  d:\work2 0 /c
+
+両方を相対パスで指定したとき
+cscript sam0306.wsf ..\work  ..\work2 0 /c
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、コピー元・先フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0306.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    '処理当日に作成されたファイル、更新されたファイルをコピーする処理を実行し結果を調べます。
+    'ユーザ関数「ModifiedFileCopy」はsam0306.vbsに含まれます
+    If ModifiedFileCopy() = True Then
+       'コピーができたときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       'コピーに失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

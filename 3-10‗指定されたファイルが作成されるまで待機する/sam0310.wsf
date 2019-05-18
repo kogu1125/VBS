@@ -1,0 +1,59 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はWaitFileExists -->
+<job id="WaitFileExists">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>指定したファイルが作成されるまで処理を待機するサンプルです。
+    </description>
+    <unnamed name="チェック対象ファイル"
+             helpstring="チェック対象ファイルのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="最大待機秒数"
+             helpstring="最大待機時間（秒数）を数値で指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="d"
+           helpstring="このスイッチを指定すると、残り秒数を表示します。"
+           type="simple"
+           required="false"
+    />
+    <example>
+■実行例
+フルパスで指定したとき
+cscript sam0310.wsf d:\work5\checkfile.txt  60
+
+相対パスで指定したとき
+cscript sam0310.wsf ..\work5\checkfile.txt  60
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了
+   （パラメタ異常、制限時間内にファイルが作成されなかった）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0310.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'ファイルが作成されるまで待機する処理を実行し結果を調べます
+    'ユーザ関数「WaitFileExists」はsam0310.vbsに含まれます
+    If WaitFileExists() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

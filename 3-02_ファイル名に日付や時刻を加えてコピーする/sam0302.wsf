@@ -1,0 +1,71 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はTimestampCopy -->
+<job id="TimestampCopy">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>ファイル名に日付や時刻を加えてコピーするサンプルです。
+    </description>
+    <unnamed name="コピー元ファイル"
+             helpstring="コピー元ファイルのパス指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="コピー先フォルダ"
+             helpstring="コピー先フォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="書式"
+           helpstring="日付や時刻の書式を指定します。"
+           type="simple"
+           required="false"
+    />
+     <example>
+■書式の一覧(名前付き引数で指定)
+/d1…yyyymmdd で作成します  /t1…hhmmssで作成します
+/d2…yyyymm で作成します    /t2…hhmmで作成します
+/d3…mmdd で作成します      /t3…mmssで作成します
+/d4…yyyy で作成します      /t4…hhで作成します
+/d5…mm で作成します        /t5…mmで作成します
+/d6…dd で作成します        /t6…ssで作成します
+
+■実行例
+
+コピー元ファイルとコピー先フォルダをフルパスで指定
+cscript sam0302.wsf d:\work\uriage.csv  d:\work
+
+コピー元ファイルを相対パスで指定
+cscript sam0302.wsf ..\data\uriage.csv d:\work
+
+コピー元ファイルとコピー先フォルダを相対パスで指定
+cscript sam0302.wsf ..\data\uriage.csv ..\data\
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、処理対象ファイル・フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0302.vbs"></script>
+<script language="VBScript" src="./include/file_common.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    'フォルダ作成処理を実行し、結果を調べます
+    'ユーザ関数「TimestampCopy」はsam0302.vbsに含まれます
+    If TimestampCopy() = True Then
+       'コピーができたときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       'コピーに失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>

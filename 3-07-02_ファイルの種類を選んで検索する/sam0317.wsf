@@ -1,0 +1,66 @@
+<!-- このプログラム全体をジョブとして定義。ジョブ名はCopySelectType -->
+<job id="CopySelectType">
+
+<!-- ヘルプを定義します -->
+<runtime>
+    <description>フォルダに保存されているファイルから条件に合うファイルを選択し、別なフォルダなどへコピーするサンプルです。
+    </description>
+    <unnamed name="コピー元フォルダ"
+             helpstring="コピー元ファイルが保存されているフォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <unnamed name="コピー先フォルダ"
+             helpstring="コピー先フォルダのパスを指定します。"
+             many="false"
+             required="true"
+    />
+    <named name="e"
+           helpstring="コピー対象ファイルの拡張子を指定します"
+           type="string"
+           required="true"
+    />
+    <named name="sub"
+           helpstring="サブフォルダを検索するスイッチです。省略時すると指定フォルダのみを検索します。"
+           type="simple"
+           required="false"
+    />
+     <example>
+■実行例
+フルパスで指定したとき
+cscript sam0317.wsf d:\work4  d:\work5  /e:txt
+
+コピー元フォルダだけを相対パスで指定したとき
+cscript sam0317.wsf ..\work4  d:\work5  /e:txt
+
+両方を相対パスで指定したとき
+cscript sam0317.wsf ..\work4  ..\work5  /e:txt
+
+■戻り値
+ 0 / 正常終了
+-1 / 異常終了（パラメタ異常、コピー元・先フォルダなし）</example>
+</runtime>
+
+<!-- 外部VBSファイルの取り込み -->
+<script language="VBScript" src="./programs/sam0317.vbs"></script>
+<script language="VBScript" src="./include/folder_common.vbs"></script>
+<script language="VBScript" src="./include/check_cmdmode.vbs"></script>
+
+<!-- メイン処理（この部分が実行される） -->
+<script language="VBScript">
+
+    Option Explicit
+
+    '特定のファイルをコピーする処理を実行し結果を調べます。
+    'ユーザ関数「CopySelectType」はsam0317.vbsに含まれます
+    If CopySelectType() = True Then
+       '処理が成功したときは終了コードに０を返します
+       WScript.Quit (0)
+    Else
+       '処理が失敗したときは終了コードに-１を返します
+       WScript.Quit (-1)
+    End If
+
+</Script>
+
+</job>
